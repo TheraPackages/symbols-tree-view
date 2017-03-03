@@ -1,0 +1,25 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle Symbols-Tree-View'
+      'command': 'symbols-tree-view:toggle'
+    }
+    {
+      'label': 'Toggle Symbols-Tree-View-Show'
+      'command': 'symbols-tree-view:showView'
+    }
+    {
+      'label': 'Toggle Symbols-Tree-View-Hide'
+      'command': 'symbols-tree-view:hideView'
+    }
+
+  ]
+'menu': [
+  {
+    'label': 'View'
+    'submenu': [
+      {'label': 'Toggle Symbols-Tree-View', 'command': 'symbols-tree-view:toggle'}
+    ]
+  }
+]
