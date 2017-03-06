@@ -46,7 +46,7 @@ module.exports =
     atom.commands.add 'atom-workspace', 'symbols-tree-view:toggle': =>
       @symbolsTreeView.toggle()
       #if @modalPanel.isVisible()
-      @modalPanel.hide()
+      # @modalPanel.hide()
       #else
         #@modalPanel.show()
 
@@ -64,17 +64,17 @@ module.exports =
         @symbolsTreeView.populate()
         @symbolsTreeView.attach()
 
-    atom.config.observe "symbols-tree-view.autoToggle", (enabled) =>
-      if enabled
-        @symbolsTreeView.toggle() unless @symbolsTreeView.hasParent()
-        #@modalPanel.show()
-      else
-        @symbolsTreeView.toggle() if @symbolsTreeView.hasParent()
-        #@modulePanel.hide() if @modulePanel
+    # atom.config.observe "symbols-tree-view.autoToggle", (enabled) =>
+    #   if enabled
+    #     @symbolsTreeView.toggle() unless @symbolsTreeView.hasParent()
+    #     #@modalPanel.show()
+    #   else
+    #     @symbolsTreeView.toggle() if @symbolsTreeView.hasParent()
+    #     #@modulePanel.hide() if @modulePanel
 
 
   deactivate: ->
-    atom.config.set('symbols-tree-view.autoToggle',true)
+    # atom.config.set('symbols-tree-view.autoToggle',true)
     @symbolsTreeView.destroy()
     @modalPanel.destroy()
     # @propertyLayerViewView.destroy()

@@ -7,6 +7,13 @@
     "type": "git",
     "url": "git+https://github.com/xndcn/symbols-tree-view.git"
   },
+  "activationCommands": {
+    "atom-workspace": [
+      "symbols-tree-view:toggle",
+      "modalPanel:show",
+      "modalPanel:hide"
+    ]
+  },
   "providedServices": {
     "hyperclick.provider": {
       "versions": {
