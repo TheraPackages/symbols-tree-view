@@ -1,7 +1,7 @@
 {
   "name": "symbols-tree-view",
   "main": "./lib/main",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "description": "A symbols view like taglist",
   "repository": {
     "type": "git",
@@ -10,6 +10,7 @@
   "activationCommands": {
     "atom-workspace": [
       "symbols-tree-view:toggle",
+      "symbols-tree-view:activate",
       "modalPanel:show",
       "modalPanel:hide"
     ]
