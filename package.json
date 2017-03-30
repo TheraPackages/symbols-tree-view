@@ -1,7 +1,7 @@
 {
   "name": "symbols-tree-view",
   "main": "./lib/main",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "description": "A symbols view like taglist",
   "repository": {
     "type": "git",
