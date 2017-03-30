@@ -115,6 +115,8 @@ module.exports =
           @width(@originalWidth)
         else
           @width(@minimalWidth)
+      @populate()
+      @attach()
 
     getEditor: -> atom.workspace.getActiveTextEditor()
     getScopeName: -> atom.workspace.getActiveTextEditor()?.getGrammar()?.scopeName
@@ -218,9 +220,9 @@ module.exports =
 
     attach: ->
       if atom.config.get('tree-view.showOnRightSide')
-        @panel = atom.workspace.addLeftPanel(item: this)
+        @panel = atom.workspace.addLeftPanel(item: this, visible: false)
       else
-        @panel = atom.workspace.addRightPanel(item: this)
+        @panel = atom.workspace.addRightPanel(item: this, visible: false)
 
       #@treeViewe = new TextEditorView
       #@panel1 = atom.workspace.addRightPanel(item: @treeViewe)
@@ -277,15 +279,15 @@ module.exports =
     # Toggle the visibility of this view
     toggle: ->
       $("#symbols-tabs").tabs({ active: 0 })
-      if @hasParent()
-        if @panel.isVisible()
-          #需要断掉VIEW的链接
-          @panel.hide()
-        else
-          @panel.show()
+      # if @hasParent()
+      if @panel.isVisible()
+        #需要断掉VIEW的链接
+        @panel.hide()
       else
-        @populate()
-        @attach()
+        @panel.show()
+    # else
+      #   @populate()
+      #   @attach()
 
     # Show view if hidden
     showView: ->
