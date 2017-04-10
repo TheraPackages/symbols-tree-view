@@ -201,14 +201,15 @@
 
 // Function Style
 .symbols-tree-view .icon-function {
-  color: @function-color-font;
+  //color: @function-color-font;
+  color: #878787;
   &:hover {
     font-weight: bold;
   	cursor: pointer;
   }
   &::before {
     .symbol-icon(symbol-function);
-    color: @function-color;
+    color: #b195ba;
   }
 }
 
@@ -292,14 +293,16 @@
 
 // Weex Tag Style
 .symbols-tree-view .icon-weex-tag {
-  color: @tag-color-font;
+  // color: @tag-color-font;
+  color:#878787;
+  font-size: 12px;
   &:hover {
     font-weight: bold;
     cursor: pointer;
   }
   &::before {
     .symbol-icon-weex(symbol-weex-tag);
-    color: @tag-color;
+     color: @tag-color;
   }
   &-comment {
     color: @tag-comment-color-font;
@@ -309,7 +312,7 @@
     }
     &::before {
       .symbol-icon-weex(symbol-weex-tag-comment);
-      color: @tag-comment-color;
+       color: @tag-comment-color;
     }
   }
 }
@@ -322,7 +325,8 @@
 
 // CSS Style
 .symbols-tree-view .icon-weex-css {
-  color: @css-color-font;
+  //color: @css-color-font;
+  color: #878787;
   &:hover {
     font-weight: bold;
   	cursor: pointer;
@@ -368,6 +372,11 @@
   span:hover {
     background: transparent;
   }
+}
+
+.list-group .selected::before, .list-tree .selected::before{
+  background-color: #242c2f;
+  border-left:solid 3px #7494a3;
 }
 
 .property-layer-view{
