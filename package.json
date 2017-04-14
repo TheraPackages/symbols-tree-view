@@ -10,7 +10,6 @@
   "activationCommands": {
     "atom-workspace": [
       "symbols-tree-view:toggle",
-      "symbols-tree-view:activate",
       "modalPanel:show",
       "modalPanel:hide"
     ]
