@@ -1,7 +1,7 @@
 {
   "name": "symbols-tree-view",
   "main": "./lib/main",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "description": "A symbols view like taglist",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "atom-space-pen-views": "^2.0.0",
     "event-kit": "latest",
     "q": "~1.0.1",
-    "jquery":"2.1.4"
+    "jquery": "2.1.4"
   },
   "keywords": [
     "taglist",
