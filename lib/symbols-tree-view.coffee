@@ -21,10 +21,10 @@ module.exports =
         @ul outlet: 'selectTabUl',=>
             @li class:'button hvr-hang' ,=>
               @a class:'symbols-tab-li', href:'#symbols-tabs-1',' func&val', =>
-                @span class:'fa fa-exclamation-triangle'
+                @span class:'fa fa-code'
             @li class:'button hvr-hang  symbols-tab-li' ,=>
               @a class:'symbols-tab-li', href:'#symbols-tabs-2',' Layers', =>
-                @span class:'fa fa-bug'
+                @span class:'fa fa-puzzle-piece'
             @li class:'button hvr-hang  symbols-tab-li' ,=>
               @a class:'symbols-tab-li', href:'#symbols-tabs-3',' Debug', =>
                 @span class:'fa fa-bug'
