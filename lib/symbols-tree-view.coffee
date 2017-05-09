@@ -42,7 +42,7 @@ module.exports =
             @label('All Of Layers')
           @div class:'div-for-symbol-tree', outlet: 'layerDiv'
 
-        @div id:'symbols-tabs-debug', class: 'thera-debug-tab'
+        @div id:'symbols-tabs-debug', class: 'thera-debug-tab', style: 'display:none;'
 
         # @div id:'symbols-tabs-3', class: 'div-for-symbol-tab'
         #@div class: 'symbols-tree-view-top tool-panel focusable-panel',outlet:'topDiv'
@@ -157,48 +157,48 @@ module.exports =
           # imho, its a bad idea =(
           jQuery('.list-item.list-selectable-item.selected').click()
 
-    updateContextMenu: (types) ->
-      @contextMenu.clear()
-      editor = @getEditor()?.id
-
-      toggleTypeVisible = (type) =>
-        @treeView.toggleTypeVisible(type)
-        @nowTypeStatus[type] = !@nowTypeStatus[type]
-
-      toggleSortByName = =>
-        @nowSortStatus[0] = !@nowSortStatus[0]
-        if @nowSortStatus[0]
-          @treeView.sortByName()
-        else
-          @treeView.sortByRow()
-        for type, visible of @nowTypeStatus
-          @treeView.toggleTypeVisible(type) unless visible
-        @focusCurrentCursorTag()
-
-      if @cachedStatus[editor]
-        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-        for type, visible of @nowTypeStatus
-          @treeView.toggleTypeVisible(type) unless visible
-        @treeView.sortByName() if @nowSortStatus[0]
-      else
-        @cachedStatus[editor] = {nowTypeStatus: {}, nowSortStatus: [false]}
-        @cachedStatus[editor].nowTypeStatus[type] = true for type in types
-        @sortByNameScopes = atom.config.get('symbols-tree-view.sortByNameScopes')
-        if @sortByNameScopes.indexOf(@getScopeName()) != -1
-          @cachedStatus[editor].nowSortStatus[0] = true
-          @treeView.sortByName()
-        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-
-      @contextMenu.addMenu(type, @nowTypeStatus[type], toggleTypeVisible) for type in types
-      @contextMenu.addSeparator()
-      @contextMenu.addMenu('sort by name', @nowSortStatus[0], toggleSortByName)
+    # updateContextMenu: (types) ->
+    #   @contextMenu.clear()
+    #   editor = @getEditor()?.id
+    #
+    #   toggleTypeVisible = (type) =>
+    #     @treeView.toggleTypeVisible(type)
+    #     @nowTypeStatus[type] = !@nowTypeStatus[type]
+    #
+    #   toggleSortByName = =>
+    #     @nowSortStatus[0] = !@nowSortStatus[0]
+    #     if @nowSortStatus[0]
+    #       @treeView.sortByName()
+    #     else
+    #       @treeView.sortByRow()
+    #     for type, visible of @nowTypeStatus
+    #       @treeView.toggleTypeVisible(type) unless visible
+    #     @focusCurrentCursorTag()
+    #
+    #   if @cachedStatus[editor]
+    #     {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
+    #     for type, visible of @nowTypeStatus
+    #       @treeView.toggleTypeVisible(type) unless visible
+    #     @treeView.sortByName() if @nowSortStatus[0]
+    #   else
+    #     @cachedStatus[editor] = {nowTypeStatus: {}, nowSortStatus: [false]}
+    #     @cachedStatus[editor].nowTypeStatus[type] = true for type in types
+    #     @sortByNameScopes = atom.config.get('symbols-tree-view.sortByNameScopes')
+    #     if @sortByNameScopes.indexOf(@getScopeName()) != -1
+    #       @cachedStatus[editor].nowSortStatus[0] = true
+    #       @treeView.sortByName()
+    #     {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
+    #
+    #   @contextMenu.addMenu(type, @nowTypeStatus[type], toggleTypeVisible) for type in types
+    #   @contextMenu.addSeparator()
+    #   @contextMenu.addMenu('sort by name', @nowSortStatus[0], toggleSortByName)
 
     generateTags: (filePath) ->
       new TagGenerator(filePath, @getScopeName()).generate().done (tags) =>
         @parser = new TagParser(tags, @getScopeName())
         {root, types} = @parser.parse()
         @treeView.setRoot(root)
-        @updateContextMenu(types)
+        # @updateContextMenu(types)
         @focusCurrentCursorTag()
 
         if (@autoHideTypes)
@@ -229,8 +229,8 @@ module.exports =
 
 
 
-      @contextMenu.attach()
-      @contextMenu.hide()
+      # @contextMenu.attach()
+      # @contextMenu.hide()
 
     attached: ->
       @onChangeEditor = atom.workspace.onDidChangeActivePaneItem (editor) =>
@@ -252,13 +252,13 @@ module.exports =
             else
               @animate({width: @minimalWidth}, duration: @animationDuration) if event.offsetX <= 0
 
-      @on "contextmenu", (event) =>
-        left = event.pageX
-        if left + @contextMenu.width() > atom.getSize().width
-          left = left - @contextMenu.width()
-        @contextMenu.css({left: left, top: event.pageY})
-        @contextMenu.show()
-        return false #disable original atom context menu
+      # @on "contextmenu", (event) =>
+      #   left = event.pageX
+      #   if left + @contextMenu.width() > atom.getSize().width
+      #     left = left - @contextMenu.width()
+      #   @contextMenu.css({left: left, top: event.pageY})
+      #   @contextMenu.show()
+      #   return false #disable original atom context menu
 
     removeEventForEditor: ->
       @onEditorSave?.dispose()
