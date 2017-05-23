@@ -52,6 +52,7 @@ module.exports =
         'text.html.php'         : 'Php'
         'source.livecodescript' : 'LiveCode'
         'source.we'             : 'Weex'
+        'source.weexvue'        : 'Weex'
 
         # For backward-compatibility with Atom versions < 0.166
         'source.c++'            : 'C++'
