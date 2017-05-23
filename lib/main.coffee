@@ -39,8 +39,8 @@ module.exports =
     @propertyLayerModel = new PropertyLayerModel (props) =>
       @propertyLayerViewView.updateProperties(props)
 
-    atom.commands.add 'atom-workspace', 'symbols-tree-view:toggle': =>
-      @symbolsTreeView.toggle()
+    atom.commands.add 'atom-workspace', 'symbols-tree-view:toggle': (activateIndex) =>
+      @symbolsTreeView.toggle(activateIndex.detail)
       #if @modalPanel.isVisible()
       # @modalPanel.hide()
       #else
@@ -50,7 +50,6 @@ module.exports =
       @modalPanel.show()
     atom.commands.add 'atom-workspace', 'modalPanel:hide': =>
       @modalPanel.hide()
-
 
 
 

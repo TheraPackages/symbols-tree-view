@@ -275,10 +275,10 @@ module.exports =
       @panel.destroy()
 
     # Toggle the visibility of this view
-    toggle: ->
-      $("#symbols-tabs").tabs({ active: 0 })
+    toggle: (option) ->
+      {activateIndex, show} = option if option
       if @hasParent()
-        if @panel.isVisible()
+        if @panel.isVisible() and not show
           #需要断掉VIEW的链接
           @panel.hide()
         else
@@ -286,6 +286,9 @@ module.exports =
       else
         @populate()
         @attach()
+      
+      index = activateIndex ? activateIndex : 0
+      $("#symbols-tabs").tabs({ active: index })
 
     # Show view if hidden
     showView: ->
