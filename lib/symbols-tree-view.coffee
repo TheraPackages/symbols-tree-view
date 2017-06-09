@@ -116,24 +116,42 @@ module.exports =
         else
           @width(@minimalWidth)
 
-    getEditor: -> atom.workspace.getActiveTextEditor()
-    getScopeName: -> atom.workspace.getActiveTextEditor()?.getGrammar()?.scopeName
+    getEditor: -> atom.workspace.getCenter().getActivePaneItem() #atom.workspace.getActiveTextEditor()
+    getScopeName: (item)-> item?.getGrammar()?.scopeName
 
-    populate: ->
-      unless editor = @getEditor()
+    populate: (editor) ->
+      unless editor
+        editor = @getEditor()
+      # atom.workspace.getTextEditors()[0].editorElement.style.display
+      # console.log '============='
+      # console.log $('.active[data-type="TextEditor"]')
+      # console.log $('.active[data-type="TextEditor"]').children()
+      # console.log atom.workspace.getCenter().getActivePaneItem()
+      # console.log '============='
+      # filePath = item?.getPath()
+      # console.log "file = #{filePath}"
+      # unless filePath
+      #   console.log $('.active[data-type="TextEditor"]')
+      #   console.log $('.active[data-type="TextEditor"]').children()
+      #   filePath = $('.active[data-type="TextEditor"]').children().attr('data-path')
+      #
+      # console.log filePath
+      unless editor
         @hide()
-      else
+        return
+
+      @generateTags(editor.getPath(), (@getScopeName editor))
+      @show()
+
+      # editor = @getEditor()
+      # if editor
+      @onEditorSave = editor.onDidSave (state) =>
         filePath = editor.getPath()
-        @generateTags(filePath)
-        @show()
+        @generateTags(filePath, (@getScopeName editor))
 
-        @onEditorSave = editor.onDidSave (state) =>
-          filePath = editor.getPath()
-          @generateTags(filePath)
-
-        @onChangeRow = editor.onDidChangeCursorPosition ({oldBufferPosition, newBufferPosition}) =>
-          if oldBufferPosition.row != newBufferPosition.row
-            @focusCurrentCursorTag()
+      @onChangeRow = editor.onDidChangeCursorPosition ({oldBufferPosition, newBufferPosition}) =>
+        if oldBufferPosition.row != newBufferPosition.row
+          @focusCurrentCursorTag()
 
     focusCurrentCursorTag: ->
       if editor = @getEditor()
@@ -157,45 +175,10 @@ module.exports =
           # imho, its a bad idea =(
           jQuery('.list-item.list-selectable-item.selected').click()
 
-    # updateContextMenu: (types) ->
-    #   @contextMenu.clear()
-    #   editor = @getEditor()?.id
-    #
-    #   toggleTypeVisible = (type) =>
-    #     @treeView.toggleTypeVisible(type)
-    #     @nowTypeStatus[type] = !@nowTypeStatus[type]
-    #
-    #   toggleSortByName = =>
-    #     @nowSortStatus[0] = !@nowSortStatus[0]
-    #     if @nowSortStatus[0]
-    #       @treeView.sortByName()
-    #     else
-    #       @treeView.sortByRow()
-    #     for type, visible of @nowTypeStatus
-    #       @treeView.toggleTypeVisible(type) unless visible
-    #     @focusCurrentCursorTag()
-    #
-    #   if @cachedStatus[editor]
-    #     {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-    #     for type, visible of @nowTypeStatus
-    #       @treeView.toggleTypeVisible(type) unless visible
-    #     @treeView.sortByName() if @nowSortStatus[0]
-    #   else
-    #     @cachedStatus[editor] = {nowTypeStatus: {}, nowSortStatus: [false]}
-    #     @cachedStatus[editor].nowTypeStatus[type] = true for type in types
-    #     @sortByNameScopes = atom.config.get('symbols-tree-view.sortByNameScopes')
-    #     if @sortByNameScopes.indexOf(@getScopeName()) != -1
-    #       @cachedStatus[editor].nowSortStatus[0] = true
-    #       @treeView.sortByName()
-    #     {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-    #
-    #   @contextMenu.addMenu(type, @nowTypeStatus[type], toggleTypeVisible) for type in types
-    #   @contextMenu.addSeparator()
-    #   @contextMenu.addMenu('sort by name', @nowSortStatus[0], toggleSortByName)
-
-    generateTags: (filePath) ->
-      new TagGenerator(filePath, @getScopeName()).generate().done (tags) =>
-        @parser = new TagParser(tags, @getScopeName())
+    generateTags: (filePath, scope) ->
+      new TagGenerator(filePath, scope).generate().done (tags) =>
+        console.log tags
+        @parser = new TagParser(tags, scope)
         {root, types} = @parser.parse()
         @treeView.setRoot(root)
         # @updateContextMenu(types)
@@ -206,7 +189,6 @@ module.exports =
             if(@autoHideTypes.indexOf(type) != -1)
               @treeView.toggleTypeVisible(type)
               @contextMenu.toggle(type)
-
 
     # Returns an object that can be retrieved when package is activated
     serialize: ->
@@ -222,20 +204,12 @@ module.exports =
       else
         @panel = atom.workspace.addRightPanel(item: this)
 
-      #@treeViewe = new TextEditorView
-      #@panel1 = atom.workspace.addRightPanel(item: @treeViewe)
-      #@treeView1 = new TreeView
-      #@panel.append(@treeView1)
-
-
-
-      # @contextMenu.attach()
-      # @contextMenu.hide()
-
     attached: ->
-      @onChangeEditor = atom.workspace.onDidChangeActivePaneItem (editor) =>
+      @onChangeEditor = atom.workspace.getCenter().onDidChangeActivePaneItem (item) =>
+        return unless item
+        return unless item.__proto__.constructor.name is "TextEditor"
         @removeEventForEditor()
-        @populate()
+        @populate(item)
 
       @onChangeAutoHide = atom.config.observe 'symbols-tree-view.autoHide', (autoHide) =>
         unless autoHide
@@ -286,7 +260,7 @@ module.exports =
       else
         @populate()
         @attach()
-      
+
       index = activateIndex ? activateIndex : 0
       $("#symbols-tabs").tabs({ active: index })
 
