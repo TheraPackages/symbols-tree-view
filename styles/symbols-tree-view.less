@@ -45,6 +45,44 @@ div#symbols-tabs {
   font-style: normal;
 }
 
+
+////////////////////////// new added //////////////////////////////
+// @font-face {font-family: "iconfont";
+//   src: url('iconfont.eot?t=1496741688094'); /* IE9*/
+//   src: url('iconfont.eot?t=1496741688094#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//   url('iconfont.woff?t=1496741688094') format('woff'), /* chrome, firefox */
+//   url('iconfont.ttf?t=1496741688094') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+//   url('iconfont.svg?t=1496741688094#iconfont') format('svg'); /* iOS 4.1- */
+// }
+//
+// .iconfont {
+//   font-family:"iconfont" !important;
+//   font-size:16px;
+//   font-style:normal;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+//
+// .icon-function:before { content: "\e792"; }
+// .icon-function1:before { content: "\e758"; }
+// .icon-property:before { content: "\e642"; }
+// .icon-function2:before { content: "\e64c"; }
+// .icon-attribute:before { content: "\e66c"; }
+
+@font-face {
+  font-family: 'js-icons';
+  src: url('atom://symbols-tree-view/icons/js-icons.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@symbols-js-icons-icon-function: "\e792";
+@symbols-js-icons-icon-function1: "\e758";
+@symbols-js-icons-icon-property: "\e642";
+@symbols-js-icons-icon-function2: "\e64c";
+@symbols-js-icons-icon-attribute: "\e66c";
+
+
 .symbols-tree-view {
   width: 100%;
   height: 100%;
@@ -169,7 +207,7 @@ div#symbols-tabs {
 @symbol-weex-tag-comment:  @symbol-weex-tag;
 
 @variable-color: hsl(305, 100%, 50%);
-@variable-color-font: hsl(285, 90%, 50%);
+@variable-color-font: #878787; //hsl(285, 90%, 50%);
 
 @function-color: hsl(330, 100%, 50%);
 @function-color-font: hsl(350, 70%, 70%);
@@ -189,12 +227,12 @@ div#symbols-tabs {
 
 .symbol-icon(@name) {
   font-family: 'symbol-icons';
-  content: @@name;
+  content: @name;
 }
 
 .symbol-icon-weex(@name) {
   font-family: 'weex-icons';
-  content: @@name;
+  content: @name;
 }
 
 
@@ -209,7 +247,9 @@ div#symbols-tabs {
   	cursor: pointer;
   }
   &::before {
-    .symbol-icon(symbol-function);
+    // .symbol-icon(@symbol-function);
+    content: @symbols-js-icons-icon-function1;
+    font-family: 'js-icons';
     color: #b195ba;
   }
 }
@@ -233,8 +273,11 @@ div#symbols-tabs {
   	cursor: pointer;
   }
   &::before {
-    .symbol-icon(symbol-variable);
+    // .symbol-icon(@symbol-variable);
+    content: @symbols-js-icons-icon-property;
+    font-family: 'js-icons';
     color: @variable-color;
+    font-size: 1.1em;
   }
 }
 
@@ -255,35 +298,35 @@ div#symbols-tabs {
 /// Other Style Begin /////////////
 
 .symbols-tree-view .icon-class::before {
-  .symbol-icon(symbol-class);
+  .symbol-icon(@symbol-class);
 }
 
 .symbols-tree-view .icon-namespace::before {
-  .symbol-icon(symbol-namespace);
+  .symbol-icon(@symbol-namespace);
 }
 
 .symbols-tree-view .icon-struct::before {
-  .symbol-icon(symbol-struct);
+  .symbol-icon(@symbol-struct);
 }
 
 .symbols-tree-view .icon-interface::before {
-  .symbol-icon(symbol-interface);
+  .symbol-icon(@symbol-interface);
 }
 
 .symbols-tree-view .icon-enum::before {
-  .symbol-icon(symbol-enum);
+  .symbol-icon(@symbol-enum);
 }
 
 .symbols-tree-view .icon-typedef::before {
-  .symbol-icon(symbol-typedef);
+  .symbol-icon(@symbol-typedef);
 }
 
 .symbols-tree-view .icon-macro::before {
-  .symbol-icon(symbol-macro);
+  .symbol-icon(@symbol-macro);
 }
 
 .symbols-tree-view .icon-union::before {
-  .symbol-icon(symbol-union);
+  .symbol-icon(@symbol-union);
 }
 
 /// Other Style End /////////////
@@ -302,7 +345,7 @@ div#symbols-tabs {
     cursor: pointer;
   }
   &::before {
-    .symbol-icon-weex(symbol-weex-tag);
+    .symbol-icon-weex(@symbol-weex-tag);
      color: @tag-color;
   }
   &-comment {
@@ -312,7 +355,7 @@ div#symbols-tabs {
       cursor: pointer;
     }
     &::before {
-      .symbol-icon-weex(symbol-weex-tag-comment);
+      .symbol-icon-weex(@symbol-weex-tag-comment);
        color: @tag-comment-color;
     }
   }
@@ -333,8 +376,9 @@ div#symbols-tabs {
   	cursor: pointer;
   }
   &::before {
-    .symbol-icon-weex(symbol-weex-css);
+    .symbol-icon-weex(@symbol-weex-css);
     color: @css-color;
+    font-size: 0.8em;
   }
 }
 

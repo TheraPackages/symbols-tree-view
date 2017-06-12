@@ -177,7 +177,6 @@ module.exports =
 
     generateTags: (filePath, scope) ->
       new TagGenerator(filePath, scope).generate().done (tags) =>
-        console.log tags
         @parser = new TagParser(tags, scope)
         {root, types} = @parser.parse()
         @treeView.setRoot(root)
