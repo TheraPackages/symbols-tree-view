@@ -174,7 +174,7 @@ module.exports =
       @borderColor[0].jscolor.fromString(props.borderColor.substr(2))
       @borderWidth.attr('value', props.borderWidth)
       @alpha.text(props.alpha)
-      $('#slider').slider('value', props.alpha)
+      $('#slider')?.slider('value', props.alpha)
       @backgroundColor[0].jscolor.fromString(props.backgroundColor.substr(2))
 
       # Text & Label
