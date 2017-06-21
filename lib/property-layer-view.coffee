@@ -137,16 +137,6 @@ module.exports =
             @div class:'wrapper', =>
               @div class:'bounding-box', outlet: 'imageContent'
 
-    initialize: ->
-      super
-      #slider = document.createElement('div')
-      #slider.classList.add('slider','slider-div-size')
-      #slider.setAttribute('data-role','slider')
-      #@viewDiv.append(slider)
-      # atom.commands.add 'atom-workspace', {
-      #   'layer:property': (styles) => @bindProperties(styles.detail)
-      # }
-
     chooseSelector: (selector, option) ->
       for item in selector.options
         item.selected = if item.value == option then true else false
@@ -174,7 +164,8 @@ module.exports =
       @borderColor[0].jscolor.fromString(props.borderColor.substr(2))
       @borderWidth.attr('value', props.borderWidth)
       @alpha.text(props.alpha)
-      $('#slider')?.slider('value', props.alpha)
+
+      $('#slider').slider({'value': props.alpha})
       @backgroundColor[0].jscolor.fromString(props.backgroundColor.substr(2))
 
       # Text & Label
