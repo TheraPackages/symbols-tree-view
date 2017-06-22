@@ -50,7 +50,24 @@ module.exports =
           #@i class:'fa fa-code icon-for-left-view-label'
           #@label('All Functions And Values')
         #@div class: 'symbols-tree-view tool-panel focusable-panel',outlet:'bottomDiv'
-    $ ->
+    # $ ->
+    #   $('#symbols-tabs').tabs activate: (event, ui) ->
+    #     #if 0 modalPanel close if 1 modalPanel view
+    #     index4select = $("#symbols-tabs").tabs('option', 'active')
+    #     if index4select != INDEX_OF_LAYERS_TAB
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:hide")
+    #
+    #     else
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:show")
+    #
+    #     if index4select == INDEX_OF_DEBUG_TAB
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:show-debug-panel")
+    #     else
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:hide-debug-panel")
+    #
+    #     return
+
+    registerListener: ->
       $('#symbols-tabs').tabs activate: (event, ui) ->
         #if 0 modalPanel close if 1 modalPanel view
         index4select = $("#symbols-tabs").tabs('option', 'active')
@@ -204,6 +221,7 @@ module.exports =
         @panel = atom.workspace.addRightPanel(item: this)
 
     attached: ->
+      @registerListener()
       @onChangeEditor = atom.workspace.getCenter().onDidChangeActivePaneItem (item) =>
         return unless item
         return unless item.__proto__.constructor.name is "TextEditor"
