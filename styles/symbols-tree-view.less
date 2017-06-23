@@ -371,7 +371,7 @@ div#symbols-tabs {
 // CSS Style
 .symbols-tree-view .icon-weex-css {
   //color: @css-color-font;
-  color: #878787;
+  color: @text-color;
   &:hover {
     font-weight: bold;
   	cursor: pointer;
@@ -389,7 +389,7 @@ div#symbols-tabs {
 
 .sub-rightview-filter{
 
-  color: #C1C1C1;
+  color: @text-color;
   font-family: Arial;
   font-size: 13.5px;
   background-color: @base-background-color;
@@ -410,7 +410,7 @@ div#symbols-tabs {
 .sub-rightview-font{
   font-family: Arial;
   font-size: 12px;
-  color: #d4d7d6;
+  color: @text-color;
   margin-left: 4px;
 }
 .list-selectable-item-ext{
@@ -425,7 +425,7 @@ div#symbols-tabs {
 }
 
 .property-layer-view{
-  box-shadow:0 0 10px rgba(0, 0, 0, .5);
+  box-shadow:0 0 10px @base-background-color;
   width: 385px;
   position: relative;
   overflow-y: auto;
@@ -495,7 +495,7 @@ input[type="number"].mod::-webkit-inner-spin-button {
     -webkit-appearance: none;
     background: #FFF url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKUlEQVQYlWNgwAT/sYhhKPiPT+F/LJgEsHv37v+EMGkmkuImoh2NoQAANlcun/q4OoYAAAAASUVORK5CYII=) no-repeat center center;
     width: 1em;
-    border-left: 1px solid #BBB;
+    border-left: 1px solid @base-background-color;
     opacity: .5; /* shows Spin Buttons per default (Chrome >= 39) */
     position: absolute;
     top: 0;
