@@ -17,7 +17,7 @@ INDEX_OF_DEBUG_TAB = 2
 module.exports =
   class SymbolsTreeView extends View
     @content: ->
-      @div id:'symbols-tabs',style:"background:rgb(14,17,18);border-width:0;display:flex; flex-direction:column;",class:"symbols-tabs", =>
+      @div id:'symbols-tabs',style:"border-width:0;display:flex; flex-direction:column;",class:"symbols-tabs", =>
         @ul outlet: 'selectTabUl',=>
             @li class:'button hvr-hang' ,=>
               @a class:'symbols-tab-li', href:'#symbols-tabs-1',' func&val', =>

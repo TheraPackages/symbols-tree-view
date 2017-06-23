@@ -27,7 +27,8 @@ div#symbols-tabs {
       height: 100%;
       padding-bottom: 30px;
     }
-  }
+  };
+  background-color: @base-background-color;
 }
 
 @font-face {
@@ -91,7 +92,7 @@ div#symbols-tabs {
   position: absolute;
   overflow-y: auto;
   overflow-x: auto;
-  color: #d4d7d6;
+  color: @text-color;
 }
 
 .symbols-tree-view-top {
@@ -101,7 +102,7 @@ div#symbols-tabs {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: rgb(31,35,64);
+  background-color: @base-background-color;
 }
 
 .icon-for-left-view-label{
@@ -241,7 +242,7 @@ div#symbols-tabs {
 // Function Style
 .symbols-tree-view .icon-function {
   //color: @function-color-font;
-  color: #878787;
+  color: @base-background-color;
   &:hover {
     font-weight: bold;
   	cursor: pointer;
@@ -338,7 +339,7 @@ div#symbols-tabs {
 // Weex Tag Style
 .symbols-tree-view .icon-weex-tag {
   // color: @tag-color-font;
-  color:#878787;
+  color:@base-background-color;
   font-size: 12px;
   &:hover {
     font-weight: bold;
@@ -349,7 +350,7 @@ div#symbols-tabs {
      color: @tag-color;
   }
   &-comment {
-    color: @tag-comment-color-font;
+    color: @base-background-color;
     &:hover {
       font-weight: bold;
       cursor: pointer;
@@ -391,7 +392,7 @@ div#symbols-tabs {
   color: #C1C1C1;
   font-family: Arial;
   font-size: 13.5px;
-  background-color: rgb(31,35,38);
+  background-color: @base-background-color;
   //text-align: right;;
   //text-transform: uppercase;
   padding-left: 10px;
@@ -420,7 +421,6 @@ div#symbols-tabs {
 }
 
 .list-group .selected::before, .list-tree .selected::before{
-  background-color: #242c2f;
   border-left:solid 3px #7494a3;
 }
 
@@ -430,7 +430,7 @@ div#symbols-tabs {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: rgb(31, 35, 38);
+  background-color: @base-background-color;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   margin-top: 3px
@@ -447,7 +447,7 @@ div#symbols-tabs {
 .text-base{
   width: 85px;
   text-align: right;
-  background-color: black;
+  background-color: @base-background-color;
   padding-left:20px;
   border: 1px;
   height: 20px;
@@ -457,7 +457,7 @@ div#symbols-tabs {
 .text-base-long{
   width: 200px;
   text-align: right;
-  background-color: black;
+  background-color: @input-background-color;
   margin-left: 5px;
   border: 1px;
   height: 20px;
@@ -465,19 +465,19 @@ div#symbols-tabs {
 }
 
 .layout-label-title{
-  background-color: black;
+  background-color: @base-background-color;
   height: 20px;
   width: 20px;
   text-align:right;
   padding-left:5px;
   margin-left: 5px;
-  color:grey;
+  color:@text-color-ignored;
 }
 
 .div-layout-base{
   padding: 5px 5px 5px 5px;
-  background-color: rgb(31, 35, 38);
-  color: #d4d7d6;
+  background-color: @base-background-color;
+  color: @text-color-ignored;
 }
 
 input[type="number"] {
@@ -510,7 +510,7 @@ input[type="number"].mod::-webkit-inner-spin-button:active{
 
 /* Override browser form filling */
 input:-webkit-autofill {
-    background: black;
+    background: @base-background-color;
     color: red;
 }
 
@@ -524,10 +524,10 @@ input:-webkit-autofill {
   float: right;
   margin-top: 5px;
   margin-right: 7px;
-  background: white;
+  background: @text-color-selected;
 
   .ui-slider-range{
-    background: grey;
+    background: @text-color-ignored;
   }
   .ui-slider-handle{
     //background-color:rgb(255,255,0);
@@ -553,8 +553,8 @@ input:-webkit-autofill {
   background: transparent;
   font-size: 16px;
   font-family: 'PT Sans Narrow', sans-serif;
-  color: white;
-  border: 1px solid black;
+  color: @text-color;
+  border: 1px solid @base-background-color;
 }
 
 
@@ -610,3 +610,4 @@ input:-webkit-autofill {
 div#symbols-tabs-debug {
   width: 400px;
 }
+
