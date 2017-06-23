@@ -25,10 +25,6 @@ module.exports =
       type: 'string'
       description: 'Here you can specify a list of scopes that will be sorted by name (ex: "text.html.php")'
       default: ''
-    defaultWidth:
-      type: 'number'
-      description: 'Width of the panel (needs Atom restart)'
-      default: 200
 
 
   symbolsTreeView: null
@@ -43,8 +39,8 @@ module.exports =
     @propertyLayerModel = new PropertyLayerModel (props) =>
       @propertyLayerViewView.updateProperties(props)
 
-    atom.commands.add 'atom-workspace', 'symbols-tree-view:toggle': =>
-      @symbolsTreeView.toggle()
+    atom.commands.add 'atom-workspace', 'symbols-tree-view:toggle': (activateIndex) =>
+      @symbolsTreeView.toggle(activateIndex.detail)
       #if @modalPanel.isVisible()
       # @modalPanel.hide()
       #else
@@ -54,7 +50,6 @@ module.exports =
       @modalPanel.show()
     atom.commands.add 'atom-workspace', 'modalPanel:hide': =>
       @modalPanel.hide()
-
 
 
 

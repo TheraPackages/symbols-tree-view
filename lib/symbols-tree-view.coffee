@@ -17,7 +17,7 @@ INDEX_OF_DEBUG_TAB = 2
 module.exports =
   class SymbolsTreeView extends View
     @content: ->
-      @div id:'symbols-tabs',style:"background:rgb(14,17,18);border-width:0;",class:"symbols-tabs", =>
+      @div id:'symbols-tabs',style:"background:rgb(14,17,18);border-width:0;display:flex; flex-direction:column;",class:"symbols-tabs", =>
         @ul outlet: 'selectTabUl',=>
             @li class:'button hvr-hang' ,=>
               @a class:'symbols-tab-li', href:'#symbols-tabs-1',' func&val', =>
@@ -42,7 +42,7 @@ module.exports =
             @label('All Of Layers')
           @div class:'div-for-symbol-tree', outlet: 'layerDiv'
 
-        @div id:'symbols-tabs-debug', class: 'thera-debug-tab'
+        @div id:'symbols-tabs-debug', class: 'thera-debug-tab', style: 'display:none;'
 
         # @div id:'symbols-tabs-3', class: 'div-for-symbol-tab'
         #@div class: 'symbols-tree-view-top tool-panel focusable-panel',outlet:'topDiv'
@@ -50,7 +50,24 @@ module.exports =
           #@i class:'fa fa-code icon-for-left-view-label'
           #@label('All Functions And Values')
         #@div class: 'symbols-tree-view tool-panel focusable-panel',outlet:'bottomDiv'
-    $ ->
+    # $ ->
+    #   $('#symbols-tabs').tabs activate: (event, ui) ->
+    #     #if 0 modalPanel close if 1 modalPanel view
+    #     index4select = $("#symbols-tabs").tabs('option', 'active')
+    #     if index4select != INDEX_OF_LAYERS_TAB
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:hide")
+    #
+    #     else
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:show")
+    #
+    #     if index4select == INDEX_OF_DEBUG_TAB
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:show-debug-panel")
+    #     else
+    #       atom.commands.dispatch(atom.views.getView(atom.workspace), "modalPanel:hide-debug-panel")
+    #
+    #     return
+
+    registerListener: ->
       $('#symbols-tabs').tabs activate: (event, ui) ->
         #if 0 modalPanel close if 1 modalPanel view
         index4select = $("#symbols-tabs").tabs('option', 'active')
@@ -116,24 +133,42 @@ module.exports =
         else
           @width(@minimalWidth)
 
-    getEditor: -> atom.workspace.getActiveTextEditor()
-    getScopeName: -> atom.workspace.getActiveTextEditor()?.getGrammar()?.scopeName
+    getEditor: -> atom.workspace.getCenter().getActivePaneItem() #atom.workspace.getActiveTextEditor()
+    getScopeName: (item)-> item?.getGrammar()?.scopeName
 
-    populate: ->
-      unless editor = @getEditor()
+    populate: (editor) ->
+      unless editor
+        editor = @getEditor()
+      # atom.workspace.getTextEditors()[0].editorElement.style.display
+      # console.log '============='
+      # console.log $('.active[data-type="TextEditor"]')
+      # console.log $('.active[data-type="TextEditor"]').children()
+      # console.log atom.workspace.getCenter().getActivePaneItem()
+      # console.log '============='
+      # filePath = item?.getPath()
+      # console.log "file = #{filePath}"
+      # unless filePath
+      #   console.log $('.active[data-type="TextEditor"]')
+      #   console.log $('.active[data-type="TextEditor"]').children()
+      #   filePath = $('.active[data-type="TextEditor"]').children().attr('data-path')
+      #
+      # console.log filePath
+      unless editor
         @hide()
-      else
+        return
+
+      @generateTags(editor.getPath(), (@getScopeName editor))
+      @show()
+
+      # editor = @getEditor()
+      # if editor
+      @onEditorSave = editor.onDidSave (state) =>
         filePath = editor.getPath()
-        @generateTags(filePath)
-        @show()
+        @generateTags(filePath, (@getScopeName editor))
 
-        @onEditorSave = editor.onDidSave (state) =>
-          filePath = editor.getPath()
-          @generateTags(filePath)
-
-        @onChangeRow = editor.onDidChangeCursorPosition ({oldBufferPosition, newBufferPosition}) =>
-          if oldBufferPosition.row != newBufferPosition.row
-            @focusCurrentCursorTag()
+      @onChangeRow = editor.onDidChangeCursorPosition ({oldBufferPosition, newBufferPosition}) =>
+        if oldBufferPosition.row != newBufferPosition.row
+          @focusCurrentCursorTag()
 
     focusCurrentCursorTag: ->
       if editor = @getEditor()
@@ -157,48 +192,12 @@ module.exports =
           # imho, its a bad idea =(
           jQuery('.list-item.list-selectable-item.selected').click()
 
-    updateContextMenu: (types) ->
-      @contextMenu.clear()
-      editor = @getEditor()?.id
-
-      toggleTypeVisible = (type) =>
-        @treeView.toggleTypeVisible(type)
-        @nowTypeStatus[type] = !@nowTypeStatus[type]
-
-      toggleSortByName = =>
-        @nowSortStatus[0] = !@nowSortStatus[0]
-        if @nowSortStatus[0]
-          @treeView.sortByName()
-        else
-          @treeView.sortByRow()
-        for type, visible of @nowTypeStatus
-          @treeView.toggleTypeVisible(type) unless visible
-        @focusCurrentCursorTag()
-
-      if @cachedStatus[editor]
-        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-        for type, visible of @nowTypeStatus
-          @treeView.toggleTypeVisible(type) unless visible
-        @treeView.sortByName() if @nowSortStatus[0]
-      else
-        @cachedStatus[editor] = {nowTypeStatus: {}, nowSortStatus: [false]}
-        @cachedStatus[editor].nowTypeStatus[type] = true for type in types
-        @sortByNameScopes = atom.config.get('symbols-tree-view.sortByNameScopes')
-        if @sortByNameScopes.indexOf(@getScopeName()) != -1
-          @cachedStatus[editor].nowSortStatus[0] = true
-          @treeView.sortByName()
-        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
-
-      @contextMenu.addMenu(type, @nowTypeStatus[type], toggleTypeVisible) for type in types
-      @contextMenu.addSeparator()
-      @contextMenu.addMenu('sort by name', @nowSortStatus[0], toggleSortByName)
-
-    generateTags: (filePath) ->
-      new TagGenerator(filePath, @getScopeName()).generate().done (tags) =>
-        @parser = new TagParser(tags, @getScopeName())
+    generateTags: (filePath, scope) ->
+      new TagGenerator(filePath, scope).generate().done (tags) =>
+        @parser = new TagParser(tags, scope)
         {root, types} = @parser.parse()
         @treeView.setRoot(root)
-        @updateContextMenu(types)
+        # @updateContextMenu(types)
         @focusCurrentCursorTag()
 
         if (@autoHideTypes)
@@ -206,7 +205,6 @@ module.exports =
             if(@autoHideTypes.indexOf(type) != -1)
               @treeView.toggleTypeVisible(type)
               @contextMenu.toggle(type)
-
 
     # Returns an object that can be retrieved when package is activated
     serialize: ->
@@ -222,20 +220,13 @@ module.exports =
       else
         @panel = atom.workspace.addRightPanel(item: this)
 
-      #@treeViewe = new TextEditorView
-      #@panel1 = atom.workspace.addRightPanel(item: @treeViewe)
-      #@treeView1 = new TreeView
-      #@panel.append(@treeView1)
-
-
-
-      @contextMenu.attach()
-      @contextMenu.hide()
-
     attached: ->
-      @onChangeEditor = atom.workspace.onDidChangeActivePaneItem (editor) =>
+      @registerListener()
+      @onChangeEditor = atom.workspace.getCenter().onDidChangeActivePaneItem (item) =>
+        return unless item
+        return unless item.__proto__.constructor.name is "TextEditor"
         @removeEventForEditor()
-        @populate()
+        @populate(item)
 
       @onChangeAutoHide = atom.config.observe 'symbols-tree-view.autoHide', (autoHide) =>
         unless autoHide
@@ -252,13 +243,13 @@ module.exports =
             else
               @animate({width: @minimalWidth}, duration: @animationDuration) if event.offsetX <= 0
 
-      @on "contextmenu", (event) =>
-        left = event.pageX
-        if left + @contextMenu.width() > atom.getSize().width
-          left = left - @contextMenu.width()
-        @contextMenu.css({left: left, top: event.pageY})
-        @contextMenu.show()
-        return false #disable original atom context menu
+      # @on "contextmenu", (event) =>
+      #   left = event.pageX
+      #   if left + @contextMenu.width() > atom.getSize().width
+      #     left = left - @contextMenu.width()
+      #   @contextMenu.css({left: left, top: event.pageY})
+      #   @contextMenu.show()
+      #   return false #disable original atom context menu
 
     removeEventForEditor: ->
       @onEditorSave?.dispose()
@@ -275,10 +266,10 @@ module.exports =
       @panel.destroy()
 
     # Toggle the visibility of this view
-    toggle: ->
-      $("#symbols-tabs").tabs({ active: 0 })
+    toggle: (option) ->
+      {activateIndex, show} = option if option
       if @hasParent()
-        if @panel.isVisible()
+        if @panel.isVisible() and not show
           #需要断掉VIEW的链接
           @panel.hide()
         else
@@ -286,6 +277,9 @@ module.exports =
       else
         @populate()
         @attach()
+
+      index = activateIndex ? activateIndex : 0
+      $("#symbols-tabs").tabs({ active: index })
 
     # Show view if hidden
     showView: ->

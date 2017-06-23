@@ -110,12 +110,12 @@ module.exports =
             @input class:'jscolor text-base-long',name: 'name', outlet: 'fontColor'
             @div class:'span-split'
             @label class: 'layout-label', 'Font-Weight'
-            @select class: "form-control", name: "selGetter",  outlet: 'fontWeight', =>
+            @select class: "layer-select-box", name: "selGetter",  outlet: 'fontWeight', =>
               @option value: "normal", selected: true, "normal"
               @option value: "bold" , "bold"
             @div class:'span-split'
             @label class: 'layout-label', 'Text-Align'
-            @select class: "form-control", name: "selGetter", outlet: 'textAlign', =>
+            @select class: "layer-select-box", name: "selGetter", outlet: 'textAlign', =>
               @option value: "left", selected: true, "left"
               @option value: "center" , "center"
               @option value: "right" , "right"
@@ -129,23 +129,13 @@ module.exports =
 
           @div outlet: 'viewDiv',class:'div-layout-base',=>
             @label class: 'layout-label', 'Mode'
-            @select class: "form-control", name: "selGetter", outlet: 'imageMode', =>
+            @select class: "layer-select-box", name: "selGetter", outlet: 'imageMode', =>
               @option value: "stretch", selected: true, "stretch"
               @option value: "cover" , "cover"
               @option value: "contain" , "contain"
             @div class:'span-split'
             @div class:'wrapper', =>
               @div class:'bounding-box', outlet: 'imageContent'
-
-    initialize: ->
-      super
-      #slider = document.createElement('div')
-      #slider.classList.add('slider','slider-div-size')
-      #slider.setAttribute('data-role','slider')
-      #@viewDiv.append(slider)
-      # atom.commands.add 'atom-workspace', {
-      #   'layer:property': (styles) => @bindProperties(styles.detail)
-      # }
 
     chooseSelector: (selector, option) ->
       for item in selector.options
@@ -174,7 +164,8 @@ module.exports =
       @borderColor[0].jscolor.fromString(props.borderColor.substr(2))
       @borderWidth.attr('value', props.borderWidth)
       @alpha.text(props.alpha)
-      $('#slider').slider('value', props.alpha)
+
+      $('#slider').slider({'value': props.alpha})
       @backgroundColor[0].jscolor.fromString(props.backgroundColor.substr(2))
 
       # Text & Label
