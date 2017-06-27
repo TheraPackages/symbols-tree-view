@@ -133,26 +133,14 @@ module.exports =
         else
           @width(@minimalWidth)
 
-    getEditor: -> atom.workspace.getCenter().getActivePaneItem() #atom.workspace.getActiveTextEditor()
+    # getEditor: -> atom.workspace.getCenter().getActivePaneItem() #atom.workspace.getActiveTextEditor()
+    getEditor: -> atom.workspace.getCenter().getActiveTextEditor()
     getScopeName: (item)-> item?.getGrammar()?.scopeName
 
     populate: (editor) ->
       unless editor
         editor = @getEditor()
-      # atom.workspace.getTextEditors()[0].editorElement.style.display
-      # console.log '============='
-      # console.log $('.active[data-type="TextEditor"]')
-      # console.log $('.active[data-type="TextEditor"]').children()
-      # console.log atom.workspace.getCenter().getActivePaneItem()
-      # console.log '============='
-      # filePath = item?.getPath()
-      # console.log "file = #{filePath}"
-      # unless filePath
-      #   console.log $('.active[data-type="TextEditor"]')
-      #   console.log $('.active[data-type="TextEditor"]').children()
-      #   filePath = $('.active[data-type="TextEditor"]').children().attr('data-path')
-      #
-      # console.log filePath
+
       unless editor
         @hide()
         return
@@ -160,8 +148,6 @@ module.exports =
       @generateTags(editor.getPath(), (@getScopeName editor))
       @show()
 
-      # editor = @getEditor()
-      # if editor
       @onEditorSave = editor.onDidSave (state) =>
         filePath = editor.getPath()
         @generateTags(filePath, (@getScopeName editor))
